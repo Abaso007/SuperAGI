@@ -42,9 +42,7 @@ class ToolBuilder:
         Returns:
             str: The validated filename.
         """
-        if filename.endswith(".py"):
-            return filename[:-3]  # Remove the last three characters (i.e., ".py")
-        return filename
+        return filename[:-3] if filename.endswith(".py") else filename
 
     def build_tool(self, tool: Tool):
         """
@@ -96,8 +94,11 @@ class ToolBuilder:
             tool.goals = agent_execution_config["goal"]
         if hasattr(tool, 'instructions'):
             tool.instructions = agent_execution_config["instruction"]
-        if hasattr(tool, 'llm') and (agent_config["model"] == "gpt4" or agent_config[
-            "model"] == "gpt-3.5-turbo") and tool.name != "QueryResource":
+        if (
+            hasattr(tool, 'llm')
+            and agent_config["model"] in ["gpt4", "gpt-3.5-turbo"]
+            and tool.name != "QueryResource"
+        ):
             tool.llm = get_model(model="gpt-3.5-turbo", api_key=model_api_key, temperature=0.4)
         elif hasattr(tool, 'llm'):
             tool.llm = get_model(model=agent_config["model"], api_key=model_api_key, temperature=0.4)

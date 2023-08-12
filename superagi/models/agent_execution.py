@@ -141,7 +141,7 @@ class AgentExecution(DBBaseModel):
         return session.query(AgentExecution).filter(AgentExecution.id == execution_id).first()
 
     @classmethod
-    def update_tokens(self, session, agent_execution_id: int, total_tokens: int, new_llm_calls: int = 1):
+    def update_tokens(cls, session, agent_execution_id: int, total_tokens: int, new_llm_calls: int = 1):
         agent_execution = session.query(AgentExecution).filter(
             AgentExecution.id == agent_execution_id).first()
         agent_execution.num_of_calls += new_llm_calls
